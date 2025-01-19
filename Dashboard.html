@@ -1,0 +1,1015 @@
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Administração de Igreja</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"><script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body style="position: relative;">
+<div class="dashboard" >
+  <!-- View Case Modal -->
+  <div class="modal-overlay" id="viewCaseModal">
+    <div class="modal">
+      <h2>Repair Case Details</h2>
+      <div id="caseDetails">
+        <h3>Client Information</h3>
+        <div class="view-grid">
+          <div class="view-group">
+            <label>Customer Name</label>
+            <div class="view-value" id="view-customer"></div>
+          </div>
+          <div class="view-group">
+            <label>Phone Number</label>
+            <div class="view-value" id="view-phone"></div>
+          </div>
+          <div class="view-group">
+            <label>Device</label>
+            <div class="view-value" id="view-device"></div>
+          </div>
+          <div class="view-group">
+            <label>Status</label>
+            <div class="view-value" id="view-status"></div>
+          </div>
+        </div>
+
+        <h3>Issues</h3>
+        <div class="view-grid">
+          <div class="view-group full-width">
+            <div class="issues-list" id="view-issues"></div>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-secondary" onclick="closeViewModal()">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <aside class="sidebar">
+    <div class="logo">
+      <a href="./Dashboard.html" style="text-decoration: none;">
+        <img src="./img/Imagem do WhatsApp de 2024-12-10 à(s) 19.42.34_38015342.jpg" alt="" width="120px" style="border-radius: 5px; margin: 0px; padding: 0px">
+        <h2>SNSF-Catolica</h2>
+      </a>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item active">Dashboard</li>
+      <li class="nav-item">Repair Cases</li>
+      <li class="nav-item">Customers</li>
+      <li class="nav-item">Inventory</li>
+      <li class="nav-item">Inventory</li>
+      <li class="nav-item">Inventory</li>
+      <li class="nav-item">Reports</li>
+      <li class="nav-item">Settings</li>
+    </ul>
+  </aside>
+  
+  <main class="main-content" style="position: relative;">
+    <div class="role-tabs">
+      <div class="role-tab active">Reception</div>
+      <div class="role-tab active">Reception</div>
+      <div class="role-tab">Middle</div>
+      <div class="role-tab">Middle Man</div>
+      <div class="role-tab">Repair Center</div>
+      <div class="role-tab">Repair</div>
+      <div class="role-tab">Owner</div>
+      <div class="role-tab">Owner</div>
+    </div>
+     
+    <div class="dashboard-cards">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">New Cases Today</h3>
+        </div>
+        <div class="statistics">12</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Pending Cases</h3>
+        </div>
+        <div class="statistics">28</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Completed Today</h3>
+        </div>
+        <div class="statistics">15</div>
+      </div>
+    </div>
+    
+    <div class="repair-list">
+      <div class="search-bar">
+        <input type="text" placeholder="Search repairs..." id="searchRepairs">
+      </div>
+      <div class="repair-list-header">
+        <div class="sortable" data-sort="id">Case ID</div>
+        <div class="sortable" data-sort="customer">Customer</div>
+        <div class="sortable" data-sort="phone">Phone</div>
+        <div class="sortable" data-sort="device">Device</div>
+        <div class="sortable" data-sort="status">Status</div>
+        <div>Actions</div>
+      </div>
+      
+      <div class="repair-item">
+        <div>#REP001</div>
+        <div>John Doe</div>
+        <div>iPhone 12</div>
+        <div>Screen Replacement</div>
+        <div><span class="status-badge status-pending">Pending</span></div>
+        <div>...</div>
+      </div>
+      
+      <div class="repair-item">
+        <div>#REP002</div>
+        <div>Jane Smith</div>
+        <div>Samsung S21</div>
+        <div>Battery Replacement</div>
+        <div><span class="status-badge status-in-progress">In Progress</span></div>
+        <div>...</div>
+      </div>
+      
+      <div class="repair-item">
+        <div>#REP003</div>
+        <div>Mike Johnson</div>
+        <div>iPad Pro</div>
+        <div>Charging Port</div>
+        <div><span class="status-badge status-completed">Completed</span></div>
+        <div>...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div class="modal-overlay" id="newCaseModal">
+  <div class="modal">
+    <h2>New Repair Case</h2>
+    <form id="newCaseForm">
+      <h3>Client Information</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>First Name</label>
+          <input type="text" class="form-control" name="firstName" required>
+        </div>
+        <div class="form-group">
+          <label>Last Name</label>
+          <input type="text" class="form-control" name="lastName" required>
+        </div>
+        <div class="form-group">
+          <label>Primary Phone Number</label>
+          <input type="tel" class="form-control" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label>Secondary Phone Number</label>
+          <input type="tel" class="form-control" id="secondaryPhone" name="secondaryPhone">
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" class="form-control" name="email" required>
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Address</label>
+          <textarea class="form-control" name="address" rows="2" required></textarea>
+        </div>
+      </div>
+
+      <h3>Device Information</h3>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Brand</label>
+          <input type="text" class="form-control" name="brand" required>
+        </div>
+        <div class="form-group">
+          <label>Model</label>
+          <input type="text" class="form-control" name="model" required>
+        </div>
+        <div class="form-group">
+          <label>IMEI Number</label>
+          <input type="text" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Device Lock Code</label>
+          <input type="text" class="form-control" name="deviceCode" placeholder="Enter device lock code if any">
+        </div>
+        <div class="form-group">
+          <label>Device Pattern</label>
+          <input type="text" class="form-control" name="devicePattern" placeholder="Describe unlock pattern if any">
+        </div>
+        <div class="form-group" style="grid-column: 1 / -1;">
+          <label>Device Condition Photos</label>
+          <div class="device-photos">
+            <div class="photo-upload" id="frontPhoto">
+              <input type="file" accept="image/*" name="devicePhoto_front">
+              <span>Front View</span>
+              <img class="photo-preview">
+            </div>
+            <div class="photo-upload" id="backPhoto">
+              <input type="file" accept="image/*" name="devicePhoto_back">
+              <span>Back View</span>
+              <img class="photo-preview">
+            </div>
+            <div class="photo-upload" id="leftPhoto">
+              <input type="file" accept="image/*" name="devicePhoto_left">
+              <span>Left Side</span>
+              <img class="photo-preview">
+            </div>
+            <div class="photo-upload" id="rightPhoto">
+              <input type="file" accept="image/*" name="devicePhoto_right">
+              <span>Right Side</span>
+              <img class="photo-preview">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Device Status & Problems</h3>
+      <div class="form-group">
+        <label>Device Power Status</label>
+        <div class="radio-group">
+          <label>
+            <input type="radio" name="powerStatus" value="on" checked> 
+            Device is Powered On
+          </label>
+          <label>
+            <input type="radio" name="powerStatus" value="off"> 
+            Device is Powered Off
+          </label>
+        </div>
+      </div>
+
+      <div id="poweredOnSection">
+        <div class="form-group">
+          <label>Issues Checklist</label>
+          <div class="issues-grid">
+            <!-- First Table -->
+            <table class="issues-table">
+              <thead>
+                <tr>
+                  <th>Issue Category</th>
+                  <th>Has Issue</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Lamp/Torch</td>
+                  <td><input type="checkbox" name="issues[]" value="torch"></td>
+                  <td><input type="text" class="form-control" name="torch_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Display</td>
+                  <td><input type="checkbox" name="issues[]" value="display"></td>
+                  <td><input type="text" class="form-control" name="display_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Touch</td>
+                  <td><input type="checkbox" name="issues[]" value="touch"></td>
+                  <td><input type="text" class="form-control" name="touch_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Camera</td>
+                  <td><input type="checkbox" name="issues[]" value="camera"></td>
+                  <td><input type="text" class="form-control" name="camera_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Microphone</td>
+                  <td><input type="checkbox" name="issues[]" value="microphone"></td>
+                  <td><input type="text" class="form-control" name="microphone_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Vibration</td>
+                  <td><input type="checkbox" name="issues[]" value="vibration"></td>
+                  <td><input type="text" class="form-control" name="vibration_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>WiFi</td>
+                  <td><input type="checkbox" name="issues[]" value="wifi"></td>
+                  <td><input type="text" class="form-control" name="wifi_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Selfie/Front Camera</td>
+                  <td><input type="checkbox" name="issues[]" value="frontcamera"></td>
+                  <td><input type="text" class="form-control" name="frontcamera_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Rear Camera</td>
+                  <td><input type="checkbox" name="issues[]" value="rearcamera"></td>
+                  <td><input type="text" class="form-control" name="rearcamera_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Network</td>
+                  <td><input type="checkbox" name="issues[]" value="network"></td>
+                  <td><input type="text" class="form-control" name="network_details" placeholder="Describe the issue"></td>
+                </tr>
+              </tbody>
+            </table>
+
+            <!-- Second Table -->
+            <table class="issues-table">
+              <thead>
+                <tr>
+                  <th>Issue Category</th>
+                  <th>Has Issue</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Fingerprint</td>
+                  <td><input type="checkbox" name="issues[]" value="fingerprint"></td>
+                  <td><input type="text" class="form-control" name="fingerprint_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>ON/OFF</td>
+                  <td><input type="checkbox" name="issues[]" value="onoff"></td>
+                  <td><input type="text" class="form-control" name="onoff_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Battery Status</td>
+                  <td><input type="checkbox" name="issues[]" value="battery"></td>
+                  <td><input type="text" class="form-control" name="battery_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Face ID</td>
+                  <td><input type="checkbox" name="issues[]" value="faceid"></td>
+                  <td><input type="text" class="form-control" name="faceid_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Volume Button</td>
+                  <td><input type="checkbox" name="issues[]" value="volume"></td>
+                  <td><input type="text" class="form-control" name="volume_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Power Button</td>
+                  <td><input type="checkbox" name="issues[]" value="power"></td>
+                  <td><input type="text" class="form-control" name="power_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Additional Issue 1</td>
+                  <td><input type="checkbox" name="issues[]" value="additional1"></td>
+                  <td><input type="text" class="form-control" name="additional1_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Additional Issue 2</td>
+                  <td><input type="checkbox" name="issues[]" value="additional2"></td>
+                  <td><input type="text" class="form-control" name="additional2_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Additional Issue 3</td>
+                  <td><input type="checkbox" name="issues[]" value="additional3"></td>
+                  <td><input type="text" class="form-control" name="additional3_details" placeholder="Describe the issue"></td>
+                </tr>
+                <tr>
+                  <td>Additional Issue 4</td>
+                  <td><input type="checkbox" name="issues[]" value="additional4"></td>
+                  <td><input type="text" class="form-control" name="additional4_details" placeholder="Describe the issue"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div id="poweredOffSection" style="display: none;">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Reason Device is Off</label>
+            <select class="form-control" name="offReason" required>
+              <option>Won't Power On</option>
+              <option>Battery Dead</option>
+              <option>Water Damage</option>
+              <option>Physical Damage</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Test Fee (FCFA)</label>
+            <input type="number" class="form-control" name="testFee" required min="0" placeholder="Enter test fee amount">
+          </div>
+          <div class="form-group" style="display: flex; align-items: center; margin-top: 1rem;">
+            <label style="margin-right: 1rem;">
+              <input type="checkbox" name="requireTest" style="margin-right: 0.5rem;"> 
+              Test Required Before Repair
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Additional Notes</label>
+        <textarea class="form-control" name="notes" rows="3"></textarea>
+      </div>
+
+      <div class="modal-buttons">
+        <button type="button" class="btn btn-secondary" id="cancelCase">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Case</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+// Store and manage repair cases
+const repairCases = [
+  {
+    id: 'REP001',
+    customer: 'John Doe',
+    phone: '+225 0123456789',
+    device: 'iPhone 12',
+    issue: 'Screen Replacement',
+    status: 'pending'
+  },
+  {
+    id: 'REP002',
+    customer: 'Jane Smith',
+    phone: '+225 0123456790',
+    device: 'Samsung S21', 
+    issue: 'Battery Replacement',
+    status: 'in-progress'
+  },
+  {
+    id: 'REP003',
+    customer: 'Mike Johnson',
+    phone: '+225 0123456791',
+    device: 'iPad Pro',
+    issue: 'Charging Port',
+    status: 'completed'
+  }
+];
+
+let currentSort = {
+  column: 'id',
+  direction: 'asc'
+};
+
+function generateCaseId() {
+  return 'REP' + String(repairCases.length + 1).padStart(3, '0');
+}
+
+function updateDashboardStatistics() {
+  const today = new Date().toDateString();
+  const stats = {
+    newToday: repairCases.filter(c => new Date(c.created).toDateString() === today).length,
+    pending: repairCases.filter(c => c.status === 'pending').length,
+    completedToday: repairCases.filter(c => c.status === 'completed' && new Date(c.completed).toDateString() === today).length
+  };
+  
+  document.querySelectorAll('.statistics').forEach((stat, index) => {
+    if (index === 0) stat.textContent = stats.newToday;
+    if (index === 1) stat.textContent = stats.pending;
+    if (index === 2) stat.textContent = stats.completedToday;
+  });
+}
+
+function sortRepairCases(column) {
+  if (currentSort.column === column) {
+    currentSort.direction = currentSort.direction === 'asc' ? 'desc' : 'asc';
+  } else {
+    currentSort.column = column;
+    currentSort.direction = 'asc';
+  }
+
+  repairCases.sort((a, b) => {
+    let valueA = a[column].toString().toLowerCase();
+    let valueB = b[column].toString().toLowerCase();
+    
+    if (currentSort.direction === 'asc') {
+      return valueA.localeCompare(valueB);
+    } else {
+      return valueB.localeCompare(valueA);
+    }
+  });
+
+  renderRepairList();
+}
+
+function filterRepairCases(searchTerm) {
+  const term = searchTerm.toLowerCase().trim();
+  return repairCases.filter(repair => {
+    const searchFields = [
+      repair.id,
+      repair.customer,
+      repair.phone,
+      repair.device,
+      repair.issue,
+      repair.status,
+      ...(repair.allIssues || [])
+    ];
+    return searchFields.some(field => 
+      String(field).toLowerCase().includes(term)
+    );
+  });
+}
+
+function viewRepair(id) {
+  const repair = repairCases.find(r => r.id === id);
+  if (repair) {
+    // Get all the view elements
+    const viewModal = document.getElementById('viewCaseModal');
+    const customerEl = document.getElementById('view-customer');
+    const phoneEl = document.getElementById('view-phone');
+    const deviceEl = document.getElementById('view-device');
+    const statusEl = document.getElementById('view-status');
+    const issuesEl = document.getElementById('view-issues');
+    
+    // Populate the view elements
+    customerEl.textContent = repair.customer;
+    phoneEl.textContent = repair.phone;
+    deviceEl.textContent = repair.device;
+    
+    // Set status with appropriate styling
+    statusEl.innerHTML = `<span class="status-badge status-${repair.status}">${repair.status}</span>`;
+    
+    // Clear and populate issues list
+    issuesEl.innerHTML = '';
+    if (repair.allIssues && repair.allIssues.length > 0) {
+      repair.allIssues.forEach(issue => {
+        const issueDiv = document.createElement('div');
+        issueDiv.className = 'issue-item';
+        issueDiv.textContent = issue;
+        issuesEl.appendChild(issueDiv);
+      });
+    } else {
+      // If no detailed issues list exists, show the main issue
+      const issueDiv = document.createElement('div');
+      issueDiv.className = 'issue-item';
+      issueDiv.textContent = repair.issue;
+      issuesEl.appendChild(issueDiv);
+    }
+    
+    // Show the modal
+    viewModal.style.display = 'flex';
+  }
+}
+
+function closeViewModal() {
+  document.getElementById('viewCaseModal').style.display = 'none';
+}
+
+function editRepair(id) {
+  const repair = repairCases.find(r => r.id === id);
+  if (repair) {
+    alert(`Editing repair case ${id}\n${JSON.stringify(repair, null, 2)}`);
+    // Implement proper edit functionality
+  }
+}
+
+function cancelRepair(id) {
+  const repair = repairCases.find(r => r.id === id);
+  if (repair) {
+    if (confirm(`Are you sure you want to cancel repair case ${id}?`)) {
+      repair.status = 'cancelled';
+      renderRepairList();
+    }
+  }
+}
+
+function renderRepairList() {
+  const repairList = document.querySelector('.repair-list');
+  if (!repairList) return; // Guard clause to prevent errors if element not found
+  
+  // Get search input element and value
+  const searchInput = document.getElementById('searchRepairs');
+  const searchTerm = searchInput ? searchInput.value : '';
+  
+  const filteredCases = searchTerm ? filterRepairCases(searchTerm) : repairCases;
+  
+  // Create new header if it doesn't exist
+  let header = repairList.querySelector('.repair-list-header');
+  if (!header) {
+    header = document.createElement('div');
+    header.className = 'repair-list-header';
+    header.innerHTML = `
+      <div class="sortable" data-sort="id">Case ID</div>
+      <div class="sortable" data-sort="customer">Customer</div>
+      <div class="sortable" data-sort="phone">Phone</div>
+      <div class="sortable" data-sort="device">Device</div>
+      <div class="sortable" data-sort="issue">Issue</div>
+      <div class="sortable" data-sort="status">Status</div>
+      <div>Actions</div>
+    `;
+  }
+  
+  // Clear the repair list
+  repairList.innerHTML = '';
+  
+  // Add search bar
+  const searchBar = document.createElement('div');
+  searchBar.className = 'search-bar';
+  searchBar.innerHTML = `<input type="text" placeholder="Search repairs..." id="searchRepairs" value="${searchTerm}">`;
+  repairList.appendChild(searchBar);
+  
+  // Add header
+  repairList.appendChild(header);
+  
+  // Update sort indicators
+  header.querySelectorAll('.sortable').forEach(col => {
+    col.classList.remove('asc', 'desc');
+    if (col.dataset.sort === currentSort.column) {
+      col.classList.add(currentSort.direction);
+    }
+  });
+  
+  // Add repair items with proper action buttons
+  filteredCases.forEach(repair => {
+    const item = document.createElement('div');
+    item.className = 'repair-item';
+    item.innerHTML = `
+      <div>#${repair.id}</div>
+      <div>${repair.customer}</div>
+      <div>${repair.phone}</div>
+      <div>${repair.device}</div>
+      <div>${repair.issue}</div>
+      <div><span class="status-badge status-${repair.status}">${repair.status}</span></div>
+      <div class="action-buttons">
+        <button class="btn-action" data-tooltip="View" onclick="viewRepair('${repair.id}')">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
+          </svg>
+        </button>
+        <button class="btn-action" data-tooltip="Edit" onclick="editRepair('${repair.id}')">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+          </svg>
+        </button>
+        <button class="btn-action" data-tooltip="Cancel" onclick="cancelRepair('${repair.id}')">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+          </svg>
+        </button>
+      </div>
+    `;
+    repairList.appendChild(item);
+  });
+  
+  // Reattach search handler
+  const newSearchInput = document.getElementById('searchRepairs');
+  if (newSearchInput) {
+    newSearchInput.addEventListener('input', (e) => {
+      renderRepairList();
+    });
+  }
+  
+  // Reattach sort handlers
+  header.querySelectorAll('.sortable').forEach(header => {
+    header.addEventListener('click', () => {
+      sortRepairCases(header.dataset.sort);
+    });
+  });
+}
+
+function showReports() {
+  const mainContent = document.querySelector('.main-content');
+  mainContent.innerHTML = `
+    <h2 style="margin-bottom: 2rem">Repair Reports & Analytics</h2>
+    
+    <div class="dashboard-cards">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Total Cases</h3>
+        </div>
+        <div class="statistics">${repairCases.length}</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Total Revenue</h3>
+        </div>
+        <div class="statistics">FCFA ${calculateTotalRevenue()}</div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Average Repair Time</h3>
+        </div>
+        <div class="statistics">${calculateAverageRepairTime()} days</div>
+      </div>
+    </div>
+
+    <div class="reports-grid">
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Status Distribution</h3>
+        </div>
+        <canvas id="statusChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Monthly Cases</h3>
+        </div>
+        <canvas id="monthlyChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Common Issues</h3>
+        </div>
+        <canvas id="issuesChart"></canvas>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">Device Brands</h3>
+        </div>
+        <canvas id="brandsChart"></canvas>
+      </div>
+    </div>
+  `;
+
+  // Initialize charts
+  createStatusChart();
+  createMonthlyChart();
+  createIssuesChart();
+  createBrandsChart();
+}
+
+// Add helper functions for calculations
+function calculateTotalRevenue() {
+  // For demo, using random values
+  return repairCases.reduce((total, repair) => {
+    return total + (Math.floor(Math.random() * 50000) + 10000);
+  }, 0).toLocaleString();
+}
+
+function calculateAverageRepairTime() {
+  return Math.floor(Math.random() * 3) + 2; // Random 2-5 days for demo
+}
+
+// Add chart creation functions
+function createStatusChart() {
+  const statusCounts = {
+    pending: repairCases.filter(r => r.status === 'pending').length,
+    'in-progress': repairCases.filter(r => r.status === 'in-progress').length,
+    completed: repairCases.filter(r => r.status === 'completed').length,
+    cancelled: repairCases.filter(r => r.status === 'cancelled').length
+  };
+
+  new Chart(document.getElementById('statusChart'), {
+    type: 'pie',
+    data: {
+      labels: Object.keys(statusCounts).map(s => s.charAt(0).toUpperCase() + s.slice(1)),
+      datasets: [{
+        data: Object.values(statusCounts),
+        backgroundColor: ['#f1c40f', '#e6550c', '#2ecc71', '#e74c3c']
+      }]
+    }
+  });
+}
+
+function createMonthlyChart() {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
+  const data = months.map(() => Math.floor(Math.random() * 50) + 10);
+
+  new Chart(document.getElementById('monthlyChart'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [{
+        label: 'Number of Cases',
+        data: data,
+        borderColor: '#e6550c',
+        tension: 0.1
+      }]
+    }
+  });
+}
+
+function createIssuesChart() {
+  const issues = ['Screen', 'Battery', 'Camera', 'Charging', 'Software', 'Others'];
+  const data = issues.map(() => Math.floor(Math.random() * 30) + 5);
+
+  new Chart(document.getElementById('issuesChart'), {
+    type: 'bar',
+    data: {
+      labels: issues,
+      datasets: [{
+        label: 'Number of Cases',
+        data: data,
+        backgroundColor: '#e6550c'
+      }]
+    }
+  });
+}
+
+function createBrandsChart() {
+  const brands = ['iPhone', 'Samsung', 'Huawei', 'Xiaomi', 'Others'];
+  const data = brands.map(() => Math.floor(Math.random() * 40) + 10);
+
+  new Chart(document.getElementById('brandsChart'), {
+    type: 'doughnut',
+    data: {
+      labels: brands,
+      datasets: [{
+        data: data,
+        backgroundColor: ['#2c3e50', '#e6550c', '#2ecc71', '#f1c40f', '#95a5a6']
+      }]
+    }
+  });
+}
+
+// Modify existing nav click handler
+const navItems = document.querySelectorAll('.nav-item');
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    navItems.forEach(i => i.classList.remove('active'));
+    item.classList.add('active');
+    
+    if (item.textContent === 'Reports') {
+      showReports();
+    } else if (item.textContent === 'Dashboard') {
+      // Restore original dashboard view
+      window.location.reload();
+    }
+  });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Add sort handlers
+  document.querySelectorAll('.sortable').forEach(header => {
+    header.addEventListener('click', () => {
+      sortRepairCases(header.dataset.sort);
+    });
+  });
+
+  // Add search handler
+  document.getElementById('searchRepairs').addEventListener('input', (e) => {
+    renderRepairList();
+  });
+
+  // Initialize phone inputs
+  const phoneInput = window.intlTelInput(document.querySelector("#phone"), {
+    initialCountry: "ci", // Cote d'Ivoire
+    preferredCountries: ["ci"],
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+
+  const secondaryPhoneInput = window.intlTelInput(document.querySelector("#secondaryPhone"), {
+    initialCountry: "ci", // Cote d'Ivoire
+    preferredCountries: ["ci"],
+    utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js",
+  });
+
+  // Initialize dashboard
+  updateDashboardStatistics();
+  renderRepairList();
+  const roleTabs = document.querySelectorAll('.role-tab');
+  roleTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      roleTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+    });
+  });
+  
+  const repairItems = document.querySelectorAll('.repair-item');
+  repairItems.forEach(item => {
+    item.addEventListener('mouseover', () => {
+      item.style.cursor = 'pointer';
+    });
+    
+    item.addEventListener('click', () => {
+      console.log('Repair item clicked');
+    });
+  });
+
+  const modal = document.getElementById('newCaseModal');
+  const roleTab = document.querySelector('.role-tab.active');
+  
+  if (roleTab && roleTab.textContent === 'Reception') {
+    const newCaseBtn = document.createElement('button');
+    newCaseBtn.className = 'btn btn-primary';
+    newCaseBtn.textContent = 'New Case';
+    newCaseBtn.style.marginBottom = '1rem';
+    document.querySelector('.role-tabs').insertAdjacentElement('afterend', newCaseBtn);
+    
+    newCaseBtn.addEventListener('click', () => {
+      modal.style.display = 'flex';
+    });
+  }
+
+  document.getElementById('cancelCase').addEventListener('click', () => {
+    modal.style.display = 'none';
+  });
+
+  // Power status handling
+  const powerRadios = document.querySelectorAll('input[name="powerStatus"]');
+  const poweredOnSection = document.getElementById('poweredOnSection');
+  const poweredOffSection = document.getElementById('poweredOffSection');
+
+  powerRadios.forEach(radio => {
+    radio.addEventListener('change', (e) => {
+      if (e.target.value === 'on') {
+        poweredOnSection.style.display = 'block';
+        poweredOffSection.style.display = 'none';
+      } else {
+        poweredOnSection.style.display = 'none';
+        poweredOffSection.style.display = 'block';
+      }
+    });
+  });
+
+  document.getElementById('newCaseForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const form = e.target;
+
+    // Validate phone numbers
+    if (!phoneInput.isValidNumber()) {
+      alert('Please enter a valid primary phone number');
+      return;
+    }
+    
+    if (document.querySelector("#secondaryPhone").value && !secondaryPhoneInput.isValidNumber()) {
+      alert('Please enter a valid secondary phone number');
+      return;
+    }
+    
+    // Get the full international numbers
+    const fullPhone = phoneInput.getNumber();
+    const fullSecondaryPhone = secondaryPhoneInput.getNumber();
+    
+    // Get form data
+    const firstName = form.querySelector('input[name="firstName"]').value;
+    const lastName = form.querySelector('input[name="lastName"]').value;
+    const brand = form.querySelector('input[name="brand"]').value;
+    const model = form.querySelector('input[name="model"]').value;
+    
+    // Get selected issues
+    let issues = [];
+    if (form.querySelector('input[name="powerStatus"]:checked').value === 'on') {
+      form.querySelectorAll('input[name="issues[]"]:checked').forEach(checkbox => {
+        const row = checkbox.closest('tr');
+        const details = row.querySelector('input[type="text"]').value;
+        issues.push(`${checkbox.value}: ${details}`);
+      });
+    } else {
+      const offReason = form.querySelector('select[name="offReason"]').value;
+      const testFee = form.querySelector('input[name="testFee"]').value;
+      const requireTest = form.querySelector('input[name="requireTest"]').checked;
+      issues.push(`Device Off - ${offReason}`);
+      issues.push(`Test Fee: ${testFee} FCFA`);
+      issues.push(`Test Required: ${requireTest ? 'Yes' : 'No'}`);
+    }
+    
+    // Create new case
+    const newCase = {
+      id: generateCaseId(),
+      customer: `${firstName} ${lastName}`,
+      phone: fullPhone,
+      device: `${brand} ${model}`,
+      issue: issues[0], // Using first issue as main issue
+      status: 'pending',
+      created: new Date(),
+      allIssues: issues
+    };
+    
+    // Add to cases array
+    repairCases.unshift(newCase);
+    
+    // Update UI
+    updateDashboardStatistics();
+    renderRepairList();
+    
+    // Close modal and show success
+    modal.style.display = 'none';
+    alert('Case created successfully!');
+    form.reset();
+  });
+
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.style.display = 'none';
+    }
+  });
+  
+  // Add click handler for view modal background
+  document.getElementById('viewCaseModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('viewCaseModal')) {
+      closeViewModal();
+    }
+  });
+
+  document.querySelectorAll('.photo-upload').forEach(upload => {
+    const input = upload.querySelector('input[type="file"]');
+    const preview = upload.querySelector('.photo-preview');
+    const label = upload.querySelector('span');
+
+    upload.addEventListener('click', () => input.click());
+
+    input.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          label.style.display = 'none';
+        };
+        reader.readAsDataURL(e.target.files[0]);
+      }
+    });
+  });
+});
+</script>
+</body></html>
